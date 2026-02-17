@@ -1,8 +1,8 @@
-package icfg
+package main
 
 // example/test icfg
 
-type ServerConfig struct {
+type TestConfig struct {
 	Bool        bool     `env:"BOOL"`
 	Int         int      `env:"INT"`
 	String      string   `env:"STRING"`
