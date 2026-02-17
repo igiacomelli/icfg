@@ -1,6 +1,6 @@
-.gitignore
 main.go
 types.go
 out.exe
 brun.sh
 .env
+.idea 
