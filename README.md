@@ -1,8 +1,9 @@
-ICFG (Ian Config) 
+icfg (Ian Config) 
+-
 
 This is my lightweight configuration module I use for my Go projects (those in need of configuration, that is). 
 
-It supports a typical JSON-to-struct configurator as well as an env-to-struct functionality which uses reflection to fill a config struct with environment variables in much the same way the JSON decoder does. 
+It supports a typical JSON-to-struct configurator as well as an env-to-struct configurator which uses reflection to fill a config struct with environment variables in much the same way the JSON decoder does. 
 
 Example Usage : 
 

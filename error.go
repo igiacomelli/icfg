@@ -7,13 +7,13 @@ import (
 const (
 
 	// error types
-	NotAStructError      = "passed icfg variable is not a struct"
-	MalformedTagError    = "icfg field tag malformed"
+	NotAStructError      = "passed cfg variable is not a struct"
+	MalformedTagError    = "cfg field tag malformed"
 	EnvVarNotFound       = "environment variable not found or blank"
 	AtoiCastError        = "environment variable could not be cast to int"
 	BoolCastError        = "environment variable could not be cast to bool"
 	SliceParseError      = "environment variable could not be parsed into slice type"
-	UnsupportedTypeError = "icfg field is of unsupported type (supported types are" + supportedConfigTypes + ")"
+	UnsupportedTypeError = "cfg field is of unsupported type (supported types are" + supportedConfigTypes + ")"
 	NotValidError        = "value is invalid"
 	ZeroError            = "value is zero"
 

@@ -13,11 +13,11 @@ const (
 	// tag types
 	supportedTagTypes = "env,json"
 
-	// icfg var types
+	// pkg var types
 	supportedConfigTypes = "int (any), string, bool"
 )
 
-func JsonConfigurate[T any](configPath string) (*T, error) {
+func FromJSON[T any](configPath string) (*T, error) {
 
 	config := new(T)
 
@@ -33,43 +33,7 @@ func JsonConfigurate[T any](configPath string) (*T, error) {
 	return config, err
 }
 
-func getConfigTagValues(tag reflect.StructTag) []string {
-	values := make([]string, 0)
-	configTagValues := strings.Split(supportedTagTypes, ",")
-	for _, val := range configTagValues {
-		tagVal := tag.Get(val)
-		if tagVal != "" {
-			values = append(values, tagVal)
-		}
-	}
-	return values
-}
-
-func setSlice(sliceType reflect.Type, sourceVars []string) reflect.Value {
-	sliceLen := len(sourceVars)
-	sliceValue := reflect.MakeSlice(reflect.SliceOf(sliceType), sliceLen, sliceLen)
-	for i := range sliceLen {
-		switch sliceType.Kind() {
-		case reflect.Int:
-			intValue, err := strconv.Atoi(sourceVars[i])
-			if err != nil {
-				return reflect.Value{}
-			}
-			sliceValue.Index(i).Set(reflect.ValueOf(&intValue).Elem())
-		case reflect.Bool:
-			boolValue, err := strconv.ParseBool(sourceVars[i])
-			if err != nil {
-				return reflect.Value{}
-			}
-			sliceValue.Index(i).Set(reflect.ValueOf(&boolValue).Elem())
-		default:
-		}
-	}
-
-	return sliceValue
-}
-
-func EnvConfigurate[T any]() (*T, error) {
+func FromEnv[T any]() (*T, error) {
 
 	configuratorError := NewConfiguratorError(false)
 
@@ -141,4 +105,40 @@ func EnvConfigurate[T any]() (*T, error) {
 		return nil, configuratorError
 	}
 	return configPointer, nil
+}
+
+func getConfigTagValues(tag reflect.StructTag) []string {
+	values := make([]string, 0)
+	configTagValues := strings.Split(supportedTagTypes, ",")
+	for _, val := range configTagValues {
+		tagVal := tag.Get(val)
+		if tagVal != "" {
+			values = append(values, tagVal)
+		}
+	}
+	return values
+}
+
+func setSlice(sliceType reflect.Type, sourceVars []string) reflect.Value {
+	sliceLen := len(sourceVars)
+	sliceValue := reflect.MakeSlice(reflect.SliceOf(sliceType), sliceLen, sliceLen)
+	for i := range sliceLen {
+		switch sliceType.Kind() {
+		case reflect.Int:
+			intValue, err := strconv.Atoi(sourceVars[i])
+			if err != nil {
+				return reflect.Value{}
+			}
+			sliceValue.Index(i).Set(reflect.ValueOf(&intValue).Elem())
+		case reflect.Bool:
+			boolValue, err := strconv.ParseBool(sourceVars[i])
+			if err != nil {
+				return reflect.Value{}
+			}
+			sliceValue.Index(i).Set(reflect.ValueOf(&boolValue).Elem())
+		default:
+		}
+	}
+
+	return sliceValue
 }

@@ -36,6 +36,12 @@ func formatConfig(s interface{}) (string, error) {
 	return formattedString, nil
 }
 
+/*
+ConfigString returns a formatted string displaying the names and values of all fields in a config struct referred to by
+a pointer.
+
+This function does not work on generic structs, the reflection logic within is only for supported config types.
+*/
 func ConfigString(config interface{}) string {
 	formattedString, err := formatConfig(config)
 	if err != nil {
@@ -44,6 +50,11 @@ func ConfigString(config interface{}) string {
 	return formattedString
 }
 
+/*
+PrintConfig prints a string returned by ConfigString.
+
+This function does not work on generic structs, the reflection logic within is only for supported config types.
+*/
 func PrintConfig(config interface{}) {
 
 	formattedString, err := formatConfig(config)

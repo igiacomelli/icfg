@@ -1,6 +1,6 @@
-package main
+package icfg
 
-// example/test icfg
+// example/test pkg
 
 type TestConfig struct {
 	Bool        bool     `env:"BOOL"`
