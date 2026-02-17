@@ -35,13 +35,13 @@ func FromJSON[T any](configPath string) (*T, error) {
 
 func FromEnv[T any]() (*T, error) {
 
-	configuratorError := NewConfiguratorError(false)
+	configuratorError := newConfiguratorError(false)
 
 	configType := reflect.TypeFor[T]()
 	configPointer := new(T)
 
 	if configType.Kind() != reflect.Struct {
-		configuratorError.Malformed(NotAStructError)
+		configuratorError.Malformed(notAStructError)
 		return configPointer, configuratorError
 	}
 
@@ -53,12 +53,12 @@ func FromEnv[T any]() (*T, error) {
 		environmentVariableValue := os.Getenv(environmentVariableName)
 
 		if environmentVariableName == "" {
-			configuratorError.Append(fieldName, MalformedTagError, i)
+			configuratorError.Append(fieldName, malformedTagError, i)
 			continue
 		}
 
 		if environmentVariableValue == "" {
-			configuratorError.Append(fieldName, EnvVarNotFound, i)
+			configuratorError.Append(fieldName, envVarNotFound, i)
 			continue
 		}
 
@@ -68,13 +68,13 @@ func FromEnv[T any]() (*T, error) {
 		case reflect.Int:
 			intValue, err := strconv.Atoi(environmentVariableValue)
 			if err != nil {
-				configuratorError.Append(fieldName, AtoiCastError, i)
+				configuratorError.Append(fieldName, atoiCastError, i)
 			}
 			configField.SetInt(int64(intValue))
 		case reflect.Bool:
 			boolValue, err := strconv.ParseBool(environmentVariableValue)
 			if err != nil {
-				configuratorError.Append(fieldName, BoolCastError, i)
+				configuratorError.Append(fieldName, boolCastError, i)
 			}
 			configField.SetBool(boolValue)
 		case reflect.Slice:
@@ -89,14 +89,14 @@ func FromEnv[T any]() (*T, error) {
 				slice := setSlice(sliceType, sourceVars)
 
 				if !slice.IsValid() {
-					configuratorError.Append(fieldName, SliceParseError, i)
+					configuratorError.Append(fieldName, sliceParseError, i)
 				} else {
 					configField.Set(slice)
 				}
 			}
 
 		default:
-			configuratorError.Append(fieldName, UnsupportedTypeError, i)
+			configuratorError.Append(fieldName, unsupportedTypeError, i)
 		}
 
 	}

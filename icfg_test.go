@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func populateManually() TestConfig {
+func populateManually() testConfig {
 	os.Setenv("BOOL", "true")
 	os.Setenv("INT", "8080")
 	os.Setenv("STRING", "lol")
@@ -53,7 +53,7 @@ func populateManually() TestConfig {
 
 	}
 
-	return TestConfig{
+	return testConfig{
 		Bool:        boolVar,
 		Int:         intVar,
 		String:      stringVar,
@@ -68,7 +68,7 @@ func TestFromEnv(t *testing.T) {
 
 	expected := populateManually()
 
-	cfg, err := FromEnv[TestConfig]()
+	cfg, err := FromEnv[testConfig]()
 	if err != nil {
 		panic(err.Error())
 	}

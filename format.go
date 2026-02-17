@@ -7,14 +7,14 @@ import (
 
 func formatConfig(s interface{}) (string, error) {
 
-	formattingError := NewConfiguratorError(true)
+	formattingError := newConfiguratorError(true)
 
 	formattedString := ""
 	structType := reflect.TypeOf(s).Elem()
 	structValue := reflect.ValueOf(s).Elem()
 
 	if structType.Kind() != reflect.Struct {
-		formattingError.Malformed(NotAStructError)
+		formattingError.Malformed(notAStructError)
 		return "", formattingError
 	}
 
@@ -23,7 +23,7 @@ func formatConfig(s interface{}) (string, error) {
 			structField := reflect.Value{}
 
 			if !structValue.IsValid() {
-				formattingError.Malformed(NotValidError)
+				formattingError.Malformed(notValidError)
 				return formattedString, formattingError
 			}
 

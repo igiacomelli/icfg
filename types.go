@@ -2,7 +2,7 @@ package icfg
 
 // example/test pkg
 
-type TestConfig struct {
+type testConfig struct {
 	Bool        bool     `env:"BOOL"`
 	Int         int      `env:"INT"`
 	String      string   `env:"STRING"`

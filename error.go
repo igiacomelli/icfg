@@ -7,22 +7,22 @@ import (
 const (
 
 	// error types
-	NotAStructError      = "passed cfg variable is not a struct"
-	MalformedTagError    = "cfg field tag malformed"
-	EnvVarNotFound       = "environment variable not found or blank"
-	AtoiCastError        = "environment variable could not be cast to int"
-	BoolCastError        = "environment variable could not be cast to bool"
-	SliceParseError      = "environment variable could not be parsed into slice type"
-	UnsupportedTypeError = "cfg field is of unsupported type (supported types are" + supportedConfigTypes + ")"
-	NotValidError        = "value is invalid"
-	ZeroError            = "value is zero"
+	notAStructError      = "passed cfg variable is not a struct"
+	malformedTagError    = "cfg field tag malformed"
+	envVarNotFound       = "environment variable not found or blank"
+	atoiCastError        = "environment variable could not be cast to int"
+	boolCastError        = "environment variable could not be cast to bool"
+	sliceParseError      = "environment variable could not be parsed into slice type"
+	unsupportedTypeError = "cfg field is of unsupported type (supported types are" + supportedConfigTypes + ")"
+	notValidError        = "value is invalid"
+	zeroError            = "value is zero"
 
 	// description variants
-	ConfigurationDescription = "Could not configure %d variables, see:\n%s"
-	FormattingDescription    = "Could not format %d variables, see:\n%s"
+	configurationDescription = "Could not configure %d variables, see:\n%s"
+	formattingDescription    = "Could not format %d variables, see:\n%s"
 )
 
-type ConfiguratorError struct {
+type configuratorError struct {
 	description string
 	variables   []string
 	causes      []string
@@ -31,12 +31,12 @@ type ConfiguratorError struct {
 	malformed   bool
 }
 
-func NewConfiguratorError(isFormat bool) *ConfiguratorError {
-	desc := ConfigurationDescription
+func newConfiguratorError(isFormat bool) *configuratorError {
+	desc := configurationDescription
 	if isFormat {
-		desc = FormattingDescription
+		desc = formattingDescription
 	}
-	return &ConfiguratorError{
+	return &configuratorError{
 		description: desc,
 		variables:   make([]string, 0),
 		causes:      make([]string, 0),
@@ -46,23 +46,23 @@ func NewConfiguratorError(isFormat bool) *ConfiguratorError {
 	}
 }
 
-func (ce *ConfiguratorError) Append(variable string, cause string, index int) {
+func (ce *configuratorError) Append(variable string, cause string, index int) {
 	ce.variables = append(ce.variables, variable)
 	ce.causes = append(ce.causes, cause)
 	ce.indices = append(ce.indices, index)
 	ce.num++
 }
 
-func (ce *ConfiguratorError) IsError() bool {
+func (ce *configuratorError) IsError() bool {
 	return ce.num > 0 || ce.malformed
 }
 
-func (ce *ConfiguratorError) Malformed(cause string) {
+func (ce *configuratorError) Malformed(cause string) {
 	ce.description = cause
 	ce.malformed = true
 }
 
-func (ce *ConfiguratorError) Error() string {
+func (ce *configuratorError) Error() string {
 
 	if ce.malformed {
 		return fmt.Sprintf("Config is malformed, see: %s", ce.description)
